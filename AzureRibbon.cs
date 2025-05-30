@@ -148,12 +148,42 @@ namespace AzureRibbonTz
                 string description = _emailService.CleanDescription(mail.Body);
 
                 var result = await _azureDevOpsService.CreateBugAsync(title, description, pat);
+                
+                // Create the work item URL
+                string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/{result.Id}";
+                
+                // Show message box with clickable link
+                using (Form popup = new Form())
+                {
+                    popup.Text = "Bug Created Successfully";
+                    popup.StartPosition = FormStartPosition.CenterScreen;
+                    popup.Width = 400;
+                    popup.Height = 150;
 
-                MessageBox.Show(
-                    $"Bug created successfully!\n\nItem ID: {result.Id}",
-                    "Success",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    LinkLabel link = new LinkLabel
+                    {
+                        Text = $"Bug #{result.Id} created successfully. Click here to open.",
+                        Width = 350,
+                        Location = new System.Drawing.Point(25, 20),
+                        AutoSize = true
+                    };
+                    
+                    link.LinkClicked += (s, ev) => 
+                    {
+                        System.Diagnostics.Process.Start(workItemUrl);
+                    };
+
+                    Button closeButton = new Button
+                    {
+                        Text = "Close",
+                        DialogResult = System.Windows.Forms.DialogResult.OK,
+                        Location = new System.Drawing.Point(150, 60)
+                    };
+
+                    popup.Controls.AddRange(new Control[] { link, closeButton });
+                    popup.AcceptButton = closeButton;
+                    popup.ShowDialog();
+                }
             }
             catch (Exception ex)
             {
