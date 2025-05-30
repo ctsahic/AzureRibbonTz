@@ -34,7 +34,7 @@ namespace AzureRibbonTz
             this.tab1.Groups.Add(this.groupPat);
             this.tab1.Groups.Add(this.groupActions);
             this.tab1.Label = "AzureTzaRibbon";
-            this.tab1.Name = "AzureTzaRibbonTab";
+            this.tab1.Name = "tab1";
             // 
             // groupUrl
             // 

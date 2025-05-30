@@ -83,9 +83,10 @@ namespace AzureRibbonTz
                 MessageBox.Show($"Error saving configuration: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            savePAT();
         }
 
-        private void btnSavePat_Click(object sender, RibbonControlEventArgs e)
+        private void savePAT()
         {
             string enteredPat = patEditBox.Text;
             if (string.IsNullOrWhiteSpace(enteredPat))
