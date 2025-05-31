@@ -9,5 +9,6 @@ namespace OutlookAddIn1.Services
     {
         Task<WorkItem> CreateWorkItemAsync(string title, string description, string pat, string workItemType);
         Task AttachFilesToWorkItemAsync(int workItemId, Outlook.Attachments attachments, string pat);
+        Task<WorkItem> UpdateWorkItemAsync(int workItemId, string comment, string pat); // Add this method
     }
 }

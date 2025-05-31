@@ -128,6 +128,73 @@ namespace AzureRibbonTz
             await CreateWorkItem("User Story");
         }
 
+        private async void updateItem_Click(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                if (_azureDevOpsService == null)
+                {
+                    MessageBox.Show("Please configure Azure DevOps settings first.", "Configuration Required",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string pat = _credentialService.GetPat();
+                if (string.IsNullOrEmpty(pat))
+                {
+                    MessageBox.Show("Please enter and save your PAT first.", "Missing PAT",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var result = await _azureDevOpsService.UpdateWorkItemAsync(24, "item update from outlook", pat);
+
+                // Create the work item URL for the message
+                string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/24";
+
+                // Show success message with link
+                using (Form popup = new Form())
+                {
+                    popup.Text = "Item Updated Successfully";
+                    popup.StartPosition = FormStartPosition.CenterScreen;
+                    popup.Width = 400;
+                    popup.Height = 150;
+
+                    LinkLabel link = new LinkLabel
+                    {
+                        Text = $"Work Item #24 updated successfully. Click here to open.",
+                        Width = 350,
+                        Location = new System.Drawing.Point(25, 20),
+                        AutoSize = true
+                    };
+
+                    link.LinkClicked += (s, ev) =>
+                    {
+                        System.Diagnostics.Process.Start(workItemUrl);
+                    };
+
+                    Button closeButton = new Button
+                    {
+                        Text = "Close",
+                        DialogResult = System.Windows.Forms.DialogResult.OK,
+                        Location = new System.Drawing.Point(150, 60)
+                    };
+
+                    popup.Controls.AddRange(new Control[] { link, closeButton });
+                    popup.AcceptButton = closeButton;
+                    popup.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error updating work item:\n\n{ex.Message}",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
         // Shared method for creating work items
         private async Task<bool> CreateWorkItem(string workItemType)
         {

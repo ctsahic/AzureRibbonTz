@@ -140,6 +140,27 @@ namespace OutlookAddIn1.Services
             return await witClient.CreateWorkItemAsync(patchDocument, _config.ProjectName, workItemType);
         }
 
+        public async Task<WorkItem> UpdateWorkItemAsync(int workItemId, string comment, string pat)
+        {
+            var connection = new VssConnection(
+                new Uri(_config.OrganizationUrl),
+                new VssBasicCredential(string.Empty, pat));
+
+            var witClient = connection.GetClient<WorkItemTrackingHttpClient>();
+
+            var patchDocument = new JsonPatchDocument
+            {
+                new JsonPatchOperation()
+                {
+                    Operation = Operation.Add,
+                    Path = "/fields/System.History",
+                    Value = comment
+                }
+            };
+
+            return await witClient.UpdateWorkItemAsync(patchDocument, workItemId);
+        }
+
         private string GetDescriptionField(string workItemType)
         {
             return workItemType.Equals("Bug", StringComparison.OrdinalIgnoreCase) 

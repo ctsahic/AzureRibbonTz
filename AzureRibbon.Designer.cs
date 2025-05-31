@@ -18,10 +18,11 @@ namespace AzureRibbonTz
             this.defaultAssigneeEditBox = this.Factory.CreateRibbonEditBox();
             this.groupPat = this.Factory.CreateRibbonGroup();
             this.patEditBox = this.Factory.CreateRibbonEditBox();
-            this.groupActions = this.Factory.CreateRibbonGroup();
-            this.createStoryButton = this.Factory.CreateRibbonButton();
             this.btnSaveAll = this.Factory.CreateRibbonButton();
+            this.groupActions = this.Factory.CreateRibbonGroup();
             this.tzahiButton = this.Factory.CreateRibbonButton();
+            this.createStoryButton = this.Factory.CreateRibbonButton();
+            this.updateItemButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
@@ -80,12 +81,29 @@ namespace AzureRibbonTz
             this.patEditBox.SizeString = "XXXXXXXXXX";
             this.patEditBox.Text = null;
             // 
+            // btnSaveAll
+            // 
+            this.btnSaveAll.Image = global::AzureRibbonTz.Properties.Resources.save_24;
+            this.btnSaveAll.Label = "Save All";
+            this.btnSaveAll.Name = "btnSaveAll";
+            this.btnSaveAll.ShowImage = true;
+            this.btnSaveAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSaveAll_Click);
+            // 
             // groupActions
             // 
             this.groupActions.Items.Add(this.tzahiButton);
             this.groupActions.Items.Add(this.createStoryButton);
+            this.groupActions.Items.Add(this.updateItemButton);
             this.groupActions.Label = "Actions";
             this.groupActions.Name = "groupActions";
+            // 
+            // tzahiButton
+            // 
+            this.tzahiButton.Image = global::AzureRibbonTz.Properties.Resources.createBug;
+            this.tzahiButton.Label = "Create Bug";
+            this.tzahiButton.Name = "tzahiButton";
+            this.tzahiButton.ShowImage = true;
+            this.tzahiButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createBug_Click);
             // 
             // createStoryButton
             // 
@@ -95,21 +113,13 @@ namespace AzureRibbonTz
             this.createStoryButton.ShowImage = true;
             this.createStoryButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createStory_Click);
             // 
-            // btnSaveAll
+            // updateItemButton
             // 
-            this.btnSaveAll.Image = global::AzureRibbonTz.Properties.Resources.save_24;
-            this.btnSaveAll.Label = "Save All";
-            this.btnSaveAll.Name = "btnSaveAll";
-            this.btnSaveAll.ShowImage = true;
-            this.btnSaveAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSaveAll_Click);
-            // 
-            // tzahiButton
-            // 
-            this.tzahiButton.Image = global::AzureRibbonTz.Properties.Resources.createBug;
-            this.tzahiButton.Label = "Create Bug";
-            this.tzahiButton.Name = "tzahiButton";
-            this.tzahiButton.ShowImage = true;
-            this.tzahiButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createBug_Click);
+            this.updateItemButton.Image = global::AzureRibbonTz.Properties.Resources.update_24;
+            this.updateItemButton.Label = "Update Item";
+            this.updateItemButton.Name = "updateItemButton";
+            this.updateItemButton.ShowImage = true;
+            this.updateItemButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateItem_Click);
             // 
             // MyRibbon
             // 
@@ -140,5 +150,6 @@ namespace AzureRibbonTz
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSaveAll;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton tzahiButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton createStoryButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton updateItemButton;
     }
 }
