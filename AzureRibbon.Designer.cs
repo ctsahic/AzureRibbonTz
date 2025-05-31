@@ -21,6 +21,7 @@ namespace AzureRibbonTz
             this.btnSaveAll = this.Factory.CreateRibbonButton();
             this.groupActions = this.Factory.CreateRibbonGroup();
             this.tzahiButton = this.Factory.CreateRibbonButton();
+            this.createStoryButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
@@ -88,6 +89,7 @@ namespace AzureRibbonTz
             // groupActions
             // 
             this.groupActions.Items.Add(this.tzahiButton);
+            this.groupActions.Items.Add(this.createStoryButton);
             this.groupActions.Label = "Actions";
             this.groupActions.Name = "groupActions";
             // 
@@ -96,6 +98,12 @@ namespace AzureRibbonTz
             this.tzahiButton.Label = "Create Bug";
             this.tzahiButton.Name = "tzahiButton";
             this.tzahiButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createBug_Click);
+            // 
+            // createStoryButton
+            // 
+            this.createStoryButton.Label = "Create Story";
+            this.createStoryButton.Name = "createStoryButton";
+            this.createStoryButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createStory_Click);
             // 
             // MyRibbon
             // 
@@ -125,5 +133,6 @@ namespace AzureRibbonTz
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox patEditBox;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSaveAll;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton tzahiButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton createStoryButton;
     }
 }

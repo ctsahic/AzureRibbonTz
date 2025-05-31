@@ -7,7 +7,7 @@ namespace OutlookAddIn1.Services
 {
     public interface IAzureDevOpsService
     {
-        Task<WorkItem> CreateBugAsync(string title, string description, string pat);
+        Task<WorkItem> CreateWorkItemAsync(string title, string description, string pat, string workItemType);
         Task AttachFilesToWorkItemAsync(int workItemId, Outlook.Attachments attachments, string pat);
     }
 }

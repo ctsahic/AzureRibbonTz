@@ -14,6 +14,7 @@ using OutlookAddIn1.Models;
 using OutlookAddIn1.Services;
 using System.Net;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AzureRibbonTz
 {
@@ -119,13 +120,24 @@ namespace AzureRibbonTz
 
         private async void createBug_Click(object sender, RibbonControlEventArgs e)
         {
+            await CreateWorkItem("Bug");
+        }
+
+        private async void createStory_Click(object sender, RibbonControlEventArgs e) 
+        {
+            await CreateWorkItem("User Story");
+        }
+
+        // Shared method for creating work items
+        private async Task<bool> CreateWorkItem(string workItemType)
+        {
             try
             {
                 if (_azureDevOpsService == null)
                 {
                     MessageBox.Show("Please configure Azure DevOps settings first.", "Configuration Required",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return false;
                 }
 
                 string pat = _credentialService.GetPat();
@@ -133,7 +145,7 @@ namespace AzureRibbonTz
                 {
                     MessageBox.Show("Please enter and save your PAT first.", "Missing PAT",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return false;
                 }
 
                 var mail = _emailService.GetSelectedEmail();
@@ -141,34 +153,33 @@ namespace AzureRibbonTz
                 {
                     MessageBox.Show("Please select a mail item.", "No Selection",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return false;
                 }
 
                 string title = mail.Subject;
                 string description = _emailService.CleanDescription(mail.Body);
 
-                // Create the bug first
-                var result = await _azureDevOpsService.CreateBugAsync(title, description, pat);
+                var result = await _azureDevOpsService.CreateWorkItemAsync(title, description, pat, workItemType);
 
-                // Then upload attachments if the email has any
-                if (mail.Attachments != null && mail.Attachments.Count > 0)
+                // Handle attachments if any exist
+                if (mail.Attachments?.Count > 0)
                 {
                     await _azureDevOpsService.AttachFilesToWorkItemAsync(result.Id.Value, mail.Attachments, pat);
                 }
-                
+
                 // Create the work item URL
                 string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/{result.Id}";
-                
+
                 // Show message box with clickable link
                 using (Form popup = new Form())
                 {
-                    popup.Text = "Bug Created Successfully";
+                    popup.Text = $"{workItemType} Created Successfully";
                     popup.StartPosition = FormStartPosition.CenterScreen;
                     popup.Width = 400;
                     popup.Height = 150;
 
-                    string message = $"Bug #{result.Id} created successfully";
-                    if (mail.Attachments != null && mail.Attachments.Count > 0)
+                    string message = $"{workItemType} #{result.Id} created successfully";
+                    if (mail.Attachments?.Count > 0)
                     {
                         message += $" with {mail.Attachments.Count} attachment(s)";
                     }
@@ -181,8 +192,8 @@ namespace AzureRibbonTz
                         Location = new System.Drawing.Point(25, 20),
                         AutoSize = true
                     };
-                    
-                    link.LinkClicked += (s, ev) => 
+
+                    link.LinkClicked += (s, ev) =>
                     {
                         System.Diagnostics.Process.Start(workItemUrl);
                     };
@@ -198,14 +209,17 @@ namespace AzureRibbonTz
                     popup.AcceptButton = closeButton;
                     popup.ShowDialog();
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Error creating bug:\n\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
+                    $"Error creating {workItemType}:\n\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                return false;
             }
         }
     }

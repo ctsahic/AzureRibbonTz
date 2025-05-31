@@ -107,6 +107,11 @@ namespace OutlookAddIn1.Services
 
         public async Task<WorkItem> CreateBugAsync(string title, string description, string pat)
         {
+            return await CreateWorkItemAsync(title, description, pat, "Bug");
+        }
+
+        public async Task<WorkItem> CreateWorkItemAsync(string title, string description, string pat, string workItemType)
+        {
             var connection = new VssConnection(
                 new Uri(_config.OrganizationUrl),
                 new VssBasicCredential(string.Empty, pat));
@@ -116,14 +121,21 @@ namespace OutlookAddIn1.Services
             var patchDocument = new JsonPatchDocument
             {
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.Title", Value = title },
-                new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/Microsoft.VSTS.TCM.ReproSteps", Value = description },
+                new JsonPatchOperation { Operation = Operation.Add, Path = GetDescriptionField(workItemType), Value = description },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.History", Value = "Created from Outlook email" },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.State", Value = "New" },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.AssignedTo", Value = _config.DefaultAssignee },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.Tags", Value = "Created-From-Outlook" }
             };
 
-            return await witClient.CreateWorkItemAsync(patchDocument, _config.ProjectName, "Bug");
+            return await witClient.CreateWorkItemAsync(patchDocument, _config.ProjectName, workItemType);
+        }
+
+        private string GetDescriptionField(string workItemType)
+        {
+            return workItemType.Equals("Bug", StringComparison.OrdinalIgnoreCase) 
+                ? "/fields/Microsoft.VSTS.TCM.ReproSteps" 
+                : "/fields/System.Description";
         }
     }
 }
