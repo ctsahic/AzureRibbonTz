@@ -18,10 +18,10 @@ namespace AzureRibbonTz
             this.defaultAssigneeEditBox = this.Factory.CreateRibbonEditBox();
             this.groupPat = this.Factory.CreateRibbonGroup();
             this.patEditBox = this.Factory.CreateRibbonEditBox();
-            this.btnSaveAll = this.Factory.CreateRibbonButton();
             this.groupActions = this.Factory.CreateRibbonGroup();
-            this.tzahiButton = this.Factory.CreateRibbonButton();
             this.createStoryButton = this.Factory.CreateRibbonButton();
+            this.btnSaveAll = this.Factory.CreateRibbonButton();
+            this.tzahiButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
@@ -80,12 +80,6 @@ namespace AzureRibbonTz
             this.patEditBox.SizeString = "XXXXXXXXXX";
             this.patEditBox.Text = null;
             // 
-            // btnSaveAll
-            // 
-            this.btnSaveAll.Label = "Save All";
-            this.btnSaveAll.Name = "btnSaveAll";
-            this.btnSaveAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSaveAll_Click);
-            // 
             // groupActions
             // 
             this.groupActions.Items.Add(this.tzahiButton);
@@ -93,17 +87,27 @@ namespace AzureRibbonTz
             this.groupActions.Label = "Actions";
             this.groupActions.Name = "groupActions";
             // 
-            // tzahiButton
-            // 
-            this.tzahiButton.Label = "Create Bug";
-            this.tzahiButton.Name = "tzahiButton";
-            this.tzahiButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createBug_Click);
-            // 
             // createStoryButton
             // 
             this.createStoryButton.Label = "Create Story";
             this.createStoryButton.Name = "createStoryButton";
             this.createStoryButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createStory_Click);
+            // 
+            // btnSaveAll
+            // 
+            this.btnSaveAll.Image = global::AzureRibbonTz.Properties.Resources.save_24;
+            this.btnSaveAll.Label = "Save All";
+            this.btnSaveAll.Name = "btnSaveAll";
+            this.btnSaveAll.ShowImage = true;
+            this.btnSaveAll.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSaveAll_Click);
+            // 
+            // tzahiButton
+            // 
+            this.tzahiButton.Image = global::AzureRibbonTz.Properties.Resources.createBug;
+            this.tzahiButton.Label = "Create Bug";
+            this.tzahiButton.Name = "tzahiButton";
+            this.tzahiButton.ShowImage = true;
+            this.tzahiButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createBug_Click);
             // 
             // MyRibbon
             // 
