@@ -24,6 +24,8 @@ namespace AzureRibbonTz
             this.createStoryButton = this.Factory.CreateRibbonButton();
             this.updateItemButton = this.Factory.CreateRibbonButton();
             this.groupUpdate = this.Factory.CreateRibbonGroup(); // New group
+            this.itemIdEditBox = this.Factory.CreateRibbonEditBox();
+            this.commentEditBox = this.Factory.CreateRibbonEditBox();
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
@@ -125,9 +127,25 @@ namespace AzureRibbonTz
             // 
             // groupUpdate
             // 
+            this.groupUpdate.Items.Add(this.itemIdEditBox);
+            this.groupUpdate.Items.Add(this.commentEditBox);
             this.groupUpdate.Items.Add(this.updateItemButton); // Add updateItemButton to groupUpdate
             this.groupUpdate.Label = "Update";
             this.groupUpdate.Name = "groupUpdate";
+            // 
+            // itemIdEditBox
+            // 
+            this.itemIdEditBox.Label = "Item ID";
+            this.itemIdEditBox.Name = "itemIdEditBox";
+            this.itemIdEditBox.SizeString = "XXXXXXXXXX";
+            this.itemIdEditBox.Text = null;
+            // 
+            // commentEditBox
+            // 
+            this.commentEditBox.Label = "Comment";
+            this.commentEditBox.Name = "commentEditBox";
+            this.commentEditBox.SizeString = "XXXXXXXXXX";
+            this.commentEditBox.Text = null;
             // 
             // MyRibbon
             // 
@@ -162,5 +180,7 @@ namespace AzureRibbonTz
         internal Microsoft.Office.Tools.Ribbon.RibbonButton tzahiButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton createStoryButton;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton updateItemButton;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox itemIdEditBox;
+        internal Microsoft.Office.Tools.Ribbon.RibbonEditBox commentEditBox;
     }
 }
