@@ -23,10 +23,12 @@ namespace AzureRibbonTz
             this.tzahiButton = this.Factory.CreateRibbonButton();
             this.createStoryButton = this.Factory.CreateRibbonButton();
             this.updateItemButton = this.Factory.CreateRibbonButton();
+            this.groupUpdate = this.Factory.CreateRibbonGroup(); // New group
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
             this.groupActions.SuspendLayout();
+            this.groupUpdate.SuspendLayout(); // Add suspend layout for new group
             this.SuspendLayout();
             // 
             // tab1
@@ -35,6 +37,7 @@ namespace AzureRibbonTz
             this.tab1.Groups.Add(this.groupUrl);
             this.tab1.Groups.Add(this.groupPat);
             this.tab1.Groups.Add(this.groupActions);
+            this.tab1.Groups.Add(this.groupUpdate); // Add new group to tab
             this.tab1.Label = "AzureTzaRibbon";
             this.tab1.Name = "tab1";
             // 
@@ -93,7 +96,6 @@ namespace AzureRibbonTz
             // 
             this.groupActions.Items.Add(this.tzahiButton);
             this.groupActions.Items.Add(this.createStoryButton);
-            this.groupActions.Items.Add(this.updateItemButton);
             this.groupActions.Label = "Actions";
             this.groupActions.Name = "groupActions";
             // 
@@ -121,6 +123,12 @@ namespace AzureRibbonTz
             this.updateItemButton.ShowImage = true;
             this.updateItemButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateItem_Click);
             // 
+            // groupUpdate
+            // 
+            this.groupUpdate.Items.Add(this.updateItemButton); // Add updateItemButton to groupUpdate
+            this.groupUpdate.Label = "Update";
+            this.groupUpdate.Name = "groupUpdate";
+            // 
             // MyRibbon
             // 
             this.Name = "MyRibbon";
@@ -135,6 +143,8 @@ namespace AzureRibbonTz
             this.groupPat.PerformLayout();
             this.groupActions.ResumeLayout(false);
             this.groupActions.PerformLayout();
+            this.groupUpdate.ResumeLayout(false);
+            this.groupUpdate.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -143,6 +153,7 @@ namespace AzureRibbonTz
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupUrl;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupPat;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupActions;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupUpdate; // New group
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox organizationUrlEditBox;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox projectNameEditBox;
         internal Microsoft.Office.Tools.Ribbon.RibbonEditBox defaultAssigneeEditBox;
