@@ -155,15 +155,31 @@ namespace AzureRibbonTz
                     return;
                 }
 
-                // Validate Comment input
-                if (string.IsNullOrWhiteSpace(commentEditBox.Text))
+                // Get the selected email
+                var mail = _emailService.GetSelectedEmail();
+                if (mail == null)
                 {
-                    MessageBox.Show("Please enter a comment.", "Missing Comment",
+                    MessageBox.Show("Please select a mail item.", "No Selection",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                var result = await _azureDevOpsService.UpdateWorkItemAsync(itemId, commentEditBox.Text, pat);
+                // Get the formatted email description
+                string description = _emailService.GetFormattedDescription(mail);
+
+                // If there's a comment, append it to the description
+                if (!string.IsNullOrWhiteSpace(commentEditBox.Text))
+                {
+                    description = $"Outlook Comment: {commentEditBox.Text}\n \n{description}";
+                }
+
+                var result = await _azureDevOpsService.UpdateWorkItemAsync(itemId, description, pat);
+
+                // Handle attachments if any exist
+                if (mail.Attachments?.Count > 0)
+                {
+                    await _azureDevOpsService.AttachFilesToWorkItemAsync(itemId, mail.Attachments, pat);
+                }
 
                 // Create the work item URL for the message
                 string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/{itemId}";
@@ -176,9 +192,13 @@ namespace AzureRibbonTz
                     popup.Width = 400;
                     popup.Height = 150;
 
+                    string message = $"Work Item #{itemId} updated successfully";
+                   
+                    message += ". Click here to open.";
+
                     LinkLabel link = new LinkLabel
                     {
-                        Text = $"Work Item #{itemId} updated successfully. Click here to open.",
+                        Text = message,
                         Width = 350,
                         Location = new System.Drawing.Point(25, 20),
                         AutoSize = true
