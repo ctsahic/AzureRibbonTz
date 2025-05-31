@@ -22,15 +22,15 @@ namespace AzureRibbonTz
             this.groupActions = this.Factory.CreateRibbonGroup();
             this.tzahiButton = this.Factory.CreateRibbonButton();
             this.createStoryButton = this.Factory.CreateRibbonButton();
-            this.updateItemButton = this.Factory.CreateRibbonButton();
-            this.groupUpdate = this.Factory.CreateRibbonGroup(); // New group
+            this.groupUpdate = this.Factory.CreateRibbonGroup();
             this.itemIdEditBox = this.Factory.CreateRibbonEditBox();
             this.commentEditBox = this.Factory.CreateRibbonEditBox();
+            this.updateItemButton = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.groupUrl.SuspendLayout();
             this.groupPat.SuspendLayout();
             this.groupActions.SuspendLayout();
-            this.groupUpdate.SuspendLayout(); // Add suspend layout for new group
+            this.groupUpdate.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
@@ -39,7 +39,7 @@ namespace AzureRibbonTz
             this.tab1.Groups.Add(this.groupUrl);
             this.tab1.Groups.Add(this.groupPat);
             this.tab1.Groups.Add(this.groupActions);
-            this.tab1.Groups.Add(this.groupUpdate); // Add new group to tab
+            this.tab1.Groups.Add(this.groupUpdate);
             this.tab1.Label = "AzureTzaRibbon";
             this.tab1.Name = "tab1";
             // 
@@ -117,19 +117,11 @@ namespace AzureRibbonTz
             this.createStoryButton.ShowImage = true;
             this.createStoryButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createStory_Click);
             // 
-            // updateItemButton
-            // 
-            this.updateItemButton.Image = global::AzureRibbonTz.Properties.Resources.update_24;
-            this.updateItemButton.Label = "Update Item";
-            this.updateItemButton.Name = "updateItemButton";
-            this.updateItemButton.ShowImage = true;
-            this.updateItemButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateItem_Click);
-            // 
             // groupUpdate
             // 
             this.groupUpdate.Items.Add(this.itemIdEditBox);
             this.groupUpdate.Items.Add(this.commentEditBox);
-            this.groupUpdate.Items.Add(this.updateItemButton); // Add updateItemButton to groupUpdate
+            this.groupUpdate.Items.Add(this.updateItemButton);
             this.groupUpdate.Label = "Update";
             this.groupUpdate.Name = "groupUpdate";
             // 
@@ -146,6 +138,14 @@ namespace AzureRibbonTz
             this.commentEditBox.Name = "commentEditBox";
             this.commentEditBox.SizeString = "XXXXXXXXXX";
             this.commentEditBox.Text = null;
+            // 
+            // updateItemButton
+            // 
+            this.updateItemButton.Image = global::AzureRibbonTz.Properties.Resources.update_24;
+            this.updateItemButton.Label = "Update Item";
+            this.updateItemButton.Name = "updateItemButton";
+            this.updateItemButton.ShowImage = true;
+            this.updateItemButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.updateItem_Click);
             // 
             // MyRibbon
             // 

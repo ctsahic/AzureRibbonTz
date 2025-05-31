@@ -147,10 +147,26 @@ namespace AzureRibbonTz
                     return;
                 }
 
-                var result = await _azureDevOpsService.UpdateWorkItemAsync(24, "item update from outlook", pat);
+                // Validate Item ID input
+                if (string.IsNullOrWhiteSpace(itemIdEditBox.Text) || !int.TryParse(itemIdEditBox.Text, out int itemId))
+                {
+                    MessageBox.Show("Please enter a valid Item ID.", "Invalid Input",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validate Comment input
+                if (string.IsNullOrWhiteSpace(commentEditBox.Text))
+                {
+                    MessageBox.Show("Please enter a comment.", "Missing Comment",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var result = await _azureDevOpsService.UpdateWorkItemAsync(itemId, commentEditBox.Text, pat);
 
                 // Create the work item URL for the message
-                string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/24";
+                string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/{itemId}";
 
                 // Show success message with link
                 using (Form popup = new Form())
@@ -162,7 +178,7 @@ namespace AzureRibbonTz
 
                     LinkLabel link = new LinkLabel
                     {
-                        Text = $"Work Item #24 updated successfully. Click here to open.",
+                        Text = $"Work Item #{itemId} updated successfully. Click here to open.",
                         Width = 350,
                         Location = new System.Drawing.Point(25, 20),
                         AutoSize = true
