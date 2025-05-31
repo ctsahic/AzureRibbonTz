@@ -16,10 +16,12 @@ namespace OutlookAddIn1.Services
     public class AzureDevOpsService : IAzureDevOpsService
     {
         private readonly AzureDevOpsConfig _config;
+        private readonly IEmailService _emailService;
 
-        public AzureDevOpsService(AzureDevOpsConfig config)
+        public AzureDevOpsService(AzureDevOpsConfig config, IEmailService emailService)
         {
             _config = config;
+            _emailService = emailService;
         }
 
         public async Task AttachFilesToWorkItemAsync(int workItemId, Attachments attachments, string pat)
@@ -121,7 +123,14 @@ namespace OutlookAddIn1.Services
             var patchDocument = new JsonPatchDocument
             {
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.Title", Value = title },
-                new JsonPatchOperation { Operation = Operation.Add, Path = GetDescriptionField(workItemType), Value = description },
+                new JsonPatchOperation 
+                { 
+                    Operation = Operation.Add, 
+                    Path = GetDescriptionField(workItemType), 
+                    Value = description,
+                    // Specify that we're sending HTML content
+                    From = "text/html"
+                },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.History", Value = "Created from Outlook email" },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.State", Value = "New" },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.AssignedTo", Value = _config.DefaultAssignee },
@@ -136,6 +145,18 @@ namespace OutlookAddIn1.Services
             return workItemType.Equals("Bug", StringComparison.OrdinalIgnoreCase) 
                 ? "/fields/Microsoft.VSTS.TCM.ReproSteps" 
                 : "/fields/System.Description";
+        }
+
+        private async Task CreateWorkItem(string workItemType)
+        {
+            // ... existing validation code ...
+
+            var mail = _emailService.GetSelectedEmail();
+            string title = mail.Subject;
+            // Use the new method instead of CleanDescription
+            string description = _emailService.GetFormattedDescription(mail);
+
+            // ... rest of the method ...
         }
     }
 }

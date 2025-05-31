@@ -5,7 +5,7 @@ namespace OutlookAddIn1.Services
     public interface IEmailService
     {
         Outlook.MailItem GetSelectedEmail();
-        string CleanDescription(string emailBody);
+        string GetFormattedDescription(Outlook.MailItem mailItem);
         Outlook.Attachments GetEmailAttachments(Outlook.MailItem mailItem);
     }
 }

@@ -49,7 +49,7 @@ namespace AzureRibbonTz
                 projectNameEditBox.Text = savedConfig.ProjectName;
                 defaultAssigneeEditBox.Text = savedConfig.DefaultAssignee;
                 _config = savedConfig;
-                _azureDevOpsService = new AzureDevOpsService(_config);
+                _azureDevOpsService = new AzureDevOpsService(_config, _emailService);
             }
         }
 
@@ -74,7 +74,7 @@ namespace AzureRibbonTz
                 };
 
                 _credentialService.SaveAzureDevOpsConfig(_config);
-                _azureDevOpsService = new AzureDevOpsService(_config);
+                _azureDevOpsService = new AzureDevOpsService(_config,  _emailService);
 
                 MessageBox.Show("Azure DevOps configuration saved successfully.", "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -157,7 +157,7 @@ namespace AzureRibbonTz
                 }
 
                 string title = mail.Subject;
-                string description = _emailService.CleanDescription(mail.Body);
+                string description = _emailService.GetFormattedDescription(mail);
 
                 var result = await _azureDevOpsService.CreateWorkItemAsync(title, description, pat, workItemType);
 
