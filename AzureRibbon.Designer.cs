@@ -89,8 +89,10 @@ namespace AzureRibbonTz
             // 
             // createStoryButton
             // 
+            this.createStoryButton.Image = global::AzureRibbonTz.Properties.Resources.story;
             this.createStoryButton.Label = "Create Story";
             this.createStoryButton.Name = "createStoryButton";
+            this.createStoryButton.ShowImage = true;
             this.createStoryButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.createStory_Click);
             // 
             // btnSaveAll
