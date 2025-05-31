@@ -17,5 +17,10 @@ namespace OutlookAddIn1.Services
             Outlook.Application app = new Outlook.Application();
             return app.ActiveExplorer().Selection[1] as Outlook.MailItem;
         }
+
+        public Outlook.Attachments GetEmailAttachments(Outlook.MailItem mailItem)
+        {
+            return mailItem?.Attachments;
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace OutlookAddIn1.Services
     {
         Outlook.MailItem GetSelectedEmail();
         string CleanDescription(string emailBody);
+        Outlook.Attachments GetEmailAttachments(Outlook.MailItem mailItem);
     }
 }

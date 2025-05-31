@@ -147,7 +147,14 @@ namespace AzureRibbonTz
                 string title = mail.Subject;
                 string description = _emailService.CleanDescription(mail.Body);
 
+                // Create the bug first
                 var result = await _azureDevOpsService.CreateBugAsync(title, description, pat);
+
+                // Then upload attachments if the email has any
+                if (mail.Attachments != null && mail.Attachments.Count > 0)
+                {
+                    await _azureDevOpsService.AttachFilesToWorkItemAsync(result.Id.Value, mail.Attachments, pat);
+                }
                 
                 // Create the work item URL
                 string workItemUrl = $"{_config.OrganizationUrl}/{_config.ProjectName}/_workitems/edit/{result.Id}";
@@ -160,9 +167,16 @@ namespace AzureRibbonTz
                     popup.Width = 400;
                     popup.Height = 150;
 
+                    string message = $"Bug #{result.Id} created successfully";
+                    if (mail.Attachments != null && mail.Attachments.Count > 0)
+                    {
+                        message += $" with {mail.Attachments.Count} attachment(s)";
+                    }
+                    message += ". Click here to open.";
+
                     LinkLabel link = new LinkLabel
                     {
-                        Text = $"Bug #{result.Id} created successfully. Click here to open.",
+                        Text = message,
                         Width = 350,
                         Location = new System.Drawing.Point(25, 20),
                         AutoSize = true
