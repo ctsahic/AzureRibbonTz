@@ -17,6 +17,8 @@ namespace OutlookAddIn1.Services
     {
         private readonly AzureDevOpsConfig _config;
         private readonly IEmailService _emailService;
+        private VssConnection _connection;
+        private string _currentPat;
 
         public AzureDevOpsService(AzureDevOpsConfig config, IEmailService emailService)
         {
@@ -24,16 +26,24 @@ namespace OutlookAddIn1.Services
             _emailService = emailService;
         }
 
+        private VssConnection GetConnection(string pat)
+        {
+            if (_connection == null || _currentPat != pat)
+            {
+                _connection = new VssConnection(
+                    new Uri(_config.OrganizationUrl),
+                    new VssBasicCredential(string.Empty, pat));
+                _currentPat = pat;
+            }
+            return _connection;
+        }
+
         public async Task AttachFilesToWorkItemAsync(int workItemId, Attachments attachments, string pat)
         {
             if (attachments == null || attachments.Count == 0)
                 return;
 
-            var connection = new VssConnection(
-                new Uri(_config.OrganizationUrl),
-                new VssBasicCredential(string.Empty, pat));
-
-            var witClient = connection.GetClient<WorkItemTrackingHttpClient>();
+            var witClient = GetConnection(pat).GetClient<WorkItemTrackingHttpClient>();
             string tempPath = Path.Combine(Path.GetTempPath(), "OutlookAttachments");
             
             try
@@ -114,11 +124,7 @@ namespace OutlookAddIn1.Services
 
         public async Task<WorkItem> CreateWorkItemAsync(string title, string description, string pat, string workItemType)
         {
-            var connection = new VssConnection(
-                new Uri(_config.OrganizationUrl),
-                new VssBasicCredential(string.Empty, pat));
-
-            var witClient = connection.GetClient<WorkItemTrackingHttpClient>();
+            var witClient = GetConnection(pat).GetClient<WorkItemTrackingHttpClient>();
 
             var patchDocument = new JsonPatchDocument
             {
@@ -142,11 +148,7 @@ namespace OutlookAddIn1.Services
 
         public async Task<WorkItem> UpdateWorkItemAsync(int workItemId, string comment, string pat)
         {
-            var connection = new VssConnection(
-                new Uri(_config.OrganizationUrl),
-                new VssBasicCredential(string.Empty, pat));
-
-            var witClient = connection.GetClient<WorkItemTrackingHttpClient>();
+            var witClient = GetConnection(pat).GetClient<WorkItemTrackingHttpClient>();
 
             var patchDocument = new JsonPatchDocument
             {
