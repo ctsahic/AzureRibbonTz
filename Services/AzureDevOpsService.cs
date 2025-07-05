@@ -117,10 +117,6 @@ namespace OutlookAddIn1.Services
             }
         }
 
-        public async Task<WorkItem> CreateBugAsync(string title, string description, string pat)
-        {
-            return await CreateWorkItemAsync(title, description, pat, "Bug");
-        }
 
         public async Task<WorkItem> CreateWorkItemAsync(string title, string description, string pat, string workItemType)
         {
@@ -170,16 +166,5 @@ namespace OutlookAddIn1.Services
                 : "/fields/System.Description";
         }
 
-        private async Task CreateWorkItem(string workItemType)
-        {
-            // ... existing validation code ...
-
-            var mail = _emailService.GetSelectedEmail();
-            string title = mail.Subject;
-            // Use the new method instead of CleanDescription
-            string description = _emailService.GetFormattedDescription(mail);
-
-            // ... rest of the method ...
-        }
     }
 }
