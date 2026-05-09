@@ -87,7 +87,7 @@ namespace OutlookAddIn1.Services
                             };
 
                             // Update work item with attachment
-                            await witClient.UpdateWorkItemAsync(patchDocument, workItemId);
+                            await witClient.UpdateWorkItemAsync(patchDocument, workItemId, bypassRules: true);
                         }
                     }
                     finally
@@ -134,12 +134,19 @@ namespace OutlookAddIn1.Services
                     From = "text/html"
                 },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.History", Value = "Created from Outlook email" },
-                new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.State", Value = "New" },
-                new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.AssignedTo", Value = _config.DefaultAssignee },
                 new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.Tags", Value = "Created-From-Outlook" }
             };
 
-            return await witClient.CreateWorkItemAsync(patchDocument, _config.ProjectName, workItemType);
+            // Only add assignee if provided
+            if (!string.IsNullOrWhiteSpace(_config?.DefaultAssignee))
+            {
+                patchDocument.Add(
+                    new JsonPatchOperation { Operation = Operation.Add, Path = "/fields/System.AssignedTo", Value = _config.DefaultAssignee }
+                );
+            }
+
+            // Use bypassRules = true to skip field validation - allows creation even with invalid/missing mandatory fields
+            return await witClient.CreateWorkItemAsync(patchDocument, _config.ProjectName, workItemType, bypassRules: true);
         }
 
         public async Task<WorkItem> UpdateWorkItemAsync(int workItemId, string comment, string pat)
